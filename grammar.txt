@@ -1,0 +1,27 @@
+JsonValue       -> [:JsonString:]
+                -> [:JsonNumber:]
+                -> [:JsonObject:]
+                -> [:JsonArray:]
+                -> true
+                -> false
+                -> null
+
+JsonString      -> "[:Character:]*"
+    Character   -> [^"\]
+                -> \\["\/bfnrt]
+                -> \\[:xdigit:]{4}
+
+JsonNumber      -> -?[:Integer:][:Fractional:]?[:Exponent:]?
+    Integer     -> 0
+                -> [1-9][:digit]*
+    Fractional  -> .[:digit:]+
+    Exponent    -> [eE][+-]?[:digit:]+
+
+JsonObject      -> {\s*}
+                -> {\s*[:NVPair:]\s*[:NVPairJoin:]*\s*}
+    NVPair      -> [:JsonString:]\s*:\s*[:JsonValue:]
+    NVPairJoin  -> ,\s*[:NVPair:]
+
+JsonArray       -> \[\s*\]
+                -> \[\s*[:JsonValue:]\s*[:ValueJoin:]*\s*\]
+    ValueJoin   -> ,\s*[JsonValue]
